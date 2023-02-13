@@ -1,0 +1,437 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Apache Dubbo – 入门</title><link>http://static.dubbo.apache.org:8080/zh-cn/overview/quickstart/</link><description>Recent content in 入门 on Apache Dubbo</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="http://static.dubbo.apache.org:8080/zh-cn/overview/quickstart/index.xml" rel="self" type="application/rss+xml"/><item><title>Overview: Java 微服务开发入门</title><link>http://static.dubbo.apache.org:8080/zh-cn/overview/quickstart/java/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://static.dubbo.apache.org:8080/zh-cn/overview/quickstart/java/</guid><description>
+&lt;h2 id="背景">背景&lt;/h2>
+&lt;p>&lt;img src="http://static.dubbo.apache.org:8080/imgs/architecture.png" alt="arch-service-discovery">&lt;/p>
+&lt;p>Dubbo 作为一款微服务框架，最重要的是向用户提供跨进程的 RPC 远程调用能力。如上图所示，Dubbo 的服务消费者（Consumer）通过一系列的工作将请求发送给服务提供者（Provider）。&lt;/p>
+&lt;p>为了实现这样一个目标，Dubbo 引入了注册中心（Registry）组件，通过注册中心，服务消费者可以感知到服务提供者的连接方式，从而将请求发送给正确的服务提供者。&lt;/p>
+&lt;h2 id="目标">目标&lt;/h2>
+&lt;p>了解微服务调用的方式以及 Dubbo 的能力&lt;/p>
+&lt;h2 id="难度">难度&lt;/h2>
+&lt;p>低&lt;/p>
+&lt;h2 id="环境要求">环境要求&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>系统：Windows、Linux、MacOS&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>JDK 8 及以上（推荐使用 JDK17）&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Git&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Docker （可选）&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="动手实践">动手实践&lt;/h2>
+&lt;p>本章将通过几个简单的命令，一步一步教你如何部署并运行一个最简单的 Dubbo 用例。&lt;/p>
+&lt;h3 id="1-获取测试工程">1. 获取测试工程&lt;/h3>
+&lt;p>在开始整个教程之前，我们需要先获取测试工程的代码。Dubbo 的所有测试用例代码都存储在 &lt;a href="https://github.com/apache/dubbo-samples">apache/dubbo-samples&lt;/a> 这个仓库中，以下这个命令可以帮你获取 Samples 仓库的所有代码。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>git clone --depth&lt;span style="color:#719e07">=&lt;/span>&lt;span style="color:#2aa198">1&lt;/span> --branch master git@github.com:apache/dubbo-samples.git
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="2-认识-dubbo-samples-项目结构">2. 认识 Dubbo Samples 项目结构&lt;/h3>
+&lt;p>在将 &lt;a href="https://github.com/apache/dubbo-samples">apache/dubbo-samples&lt;/a> 这个仓库 clone 到本地以后，本小节将就仓库的具体组织方式做说明。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-fallback" data-lang="fallback">&lt;span style="display:flex;">&lt;span>.
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>├── codestyle // 开发使用的 style 配置文件
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>├── 1-basic // 基础的入门用例
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>├── 2-advanced // 高级用法
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>├── 3-extensions // 扩展使用示例
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>├── 4-governance // 服务治理用例
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>├── 10-task // Dubbo 学习系列示例
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>├── 99-integration // 集成测试使用
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>├── test // 集成测试使用
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>└── tools // 三方组件快速启动工具
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>如上表所示，&lt;a href="https://github.com/apache/dubbo-samples">apache/dubbo-samples&lt;/a> 主要由三个部分组成：代码风格文件、测试代码、集成测试。&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>代码风格文件是开发 Dubbo 代码的时候可以使用，其中包括了 IntelliJ IDEA 的配置文件。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>测试代码即本教材所需要的核心内容。目前包括了 5 个部分的内容：面向初学者的 basic 入门用例、面向开发人员的 advanced 高级用法、面向中间件维护者的 extensions Dubbo 周边扩展使用示例、面向生产的 governance 服务治理用例以及 Dubbo 学习系列。本文将基于 basic 入门用例中最简单的 Dubbo API 使用方式进行讲解。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>集成测试是 Dubbo 的质量保证体系中重要的一环，Dubbo 的每个版本都会对所有的 samples 进行回归验证，保证 Dubbo 的所有变更都不会影响 samples 的使用。&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;h3 id="3-启动一个简易的注册中心">3. 启动一个简易的注册中心&lt;/h3>
+&lt;p>从这一小节开始，将正式通过三个命令部署一个微服务应用。&lt;/p>
+&lt;p>从 &lt;a href="#%E8%83%8C%E6%99%AF">背景&lt;/a> 一节中可知，运行起 Dubbo 应用的一个大前提是部署一个注册中心，为了让本教程更易于上手，我们提供了一个基于 Apache Zookeeper 注册中心的简易启动器，如果您需要在生产环境部署注册中心，请参考&lt;a href="">生产环境初始化&lt;/a>一文部署高可用的注册中心。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>Windows:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>./mvnw.cmd clean compile exec:java -pl tools/embedded-zookeeper
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Linux / MacOS:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>./mvnw clean compile exec:java -pl tools/embedded-zookeeper
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>注：需要开一个独立的 terminal 运行，命令将会保持一直执行的状态。
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Docker:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>docker run --name some-zookeeper --restart always -d zookeeper
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>在执行完上述命令以后，等待一会出现如下图所示的日志即代表注册中心启动完毕，可以继续执行后续任务。&lt;/p>
+&lt;p>&lt;img src="http://static.dubbo.apache.org:8080/imgs/docs3-v2/java-sdk/quickstart/2023-01-19-15-55-23-image.png" alt="registry">&lt;/p>
+&lt;h3 id="4-启动服务提供者">4. 启动服务提供者&lt;/h3>
+&lt;p>在启动了注册中心之后，下一步是启动一个对外提供服务的服务提供者。在 dubbo-samples 中也提供了对应的示例，可以通过以下命令快速拉起。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>Windows:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>./mvnw.cmd clean compile exec:java -pl 1-basic/dubbo-samples-api -Dexec.mainClass&lt;span style="color:#719e07">=&lt;/span>&lt;span style="color:#2aa198">&amp;#34;org.apache.dubbo.samples.provider.Application&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Linux / MacOS:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>./mvnw clean compile exec:java -pl 1-basic/dubbo-samples-api -Dexec.mainClass&lt;span style="color:#719e07">=&lt;/span>&lt;span style="color:#2aa198">&amp;#34;org.apache.dubbo.samples.provider.Application&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>注：需要开一个独立的 terminal 运行，命令将会保持一直执行的状态。
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>在执行完上述命令以后，等待一会出现如下图所示的日志（&lt;code>DubboBootstrap awaiting&lt;/code>）即代表服务提供者启动完毕，标志着该服务提供者可以对外提供服务了。&lt;/p>
+&lt;p>&lt;img src="http://static.dubbo.apache.org:8080/imgs/docs3-v2/java-sdk/quickstart/2023-01-19-15-56-09-image.png" alt="provider">&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-fallback" data-lang="fallback">&lt;span style="display:flex;">&lt;span>[19/01/23 03:55:49:049 CST] org.apache.dubbo.samples.provider.Application.main() INFO bootstrap.DubboBootstrap: [DUBBO] DubboBootstrap awaiting ..., dubbo version: 3.2.0-beta.3, current host: 169.254.44.42
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="5-启动服务消费者">5. 启动服务消费者&lt;/h3>
+&lt;p>最后一步是启动一个服务消费者来调用服务提供者，也即是 RPC 调用的核心，为服务消费者提供调用服务提供者的桥梁。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>Windows:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>./mvnw.cmd clean compile exec:java -pl 1-basic/dubbo-samples-api -Dexec.mainClass&lt;span style="color:#719e07">=&lt;/span>&lt;span style="color:#2aa198">&amp;#34;org.apache.dubbo.samples.client.Application&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Linux / MacOS:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>./mvnw clean compile exec:java -pl 1-basic/dubbo-samples-api -Dexec.mainClass&lt;span style="color:#719e07">=&lt;/span>&lt;span style="color:#2aa198">&amp;#34;org.apache.dubbo.samples.client.Application&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>在执行完上述命令以后，等待一会出现如下图所示的日志（&lt;code>hi, dubbo&lt;/code>），打印出的数据就是服务提供者处理之后返回的，标志着一次服务调用的成功。&lt;/p>
+&lt;p>&lt;img src="http://static.dubbo.apache.org:8080/imgs/docs3-v2/java-sdk/quickstart/2023-01-19-16-30-14-image.png" alt="consumer">&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-fallback" data-lang="fallback">&lt;span style="display:flex;">&lt;span>Receive result ======&amp;gt; hi, dubbo
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="延伸阅读">延伸阅读&lt;/h2>
+&lt;h3 id="1-消费端是怎么找到服务端的">1. 消费端是怎么找到服务端的？&lt;/h3>
+&lt;p>在本用例中的步骤 3 启动了一个 Zookeeper 的注册中心，服务提供者会向注册中心中写入自己的地址，供服务消费者获取。&lt;/p>
+&lt;p>Dubbo 会在 Zookeeper 的 &lt;code>/dubbo/interfaceName&lt;/code> 和 &lt;code>/services/appName&lt;/code> 下写入服务提供者的连接信息。&lt;/p>
+&lt;p>如下所示是 Zookeeper 上的数据示例：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-fallback" data-lang="fallback">&lt;span style="display:flex;">&lt;span>[zk: localhost:2181(CONNECTED) 5] ls /dubbo/org.apache.dubbo.samples.api.GreetingsService/providers
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>[dubbo%3A%2F%2F30.221.146.35%3A20880%2Forg.apache.dubbo.samples.api.GreetingsService%3Fanyhost%3Dtrue%26application%3Dfirst-dubbo-provider%26background%3Dfalse%26deprecated%3Dfalse%26dubbo%3D2.0.2%26dynamic%3Dtrue%26environment%3Dproduct%26generic%3Dfalse%26interface%3Dorg.apache.dubbo.samples.api.GreetingsService%26ipv6%3Dfd00%3A1%3A5%3A5200%3A3218%3A774a%3A4f67%3A2341%26methods%3DsayHi%26pid%3D85639%26release%3D3.1.4%26service-name-mapping%3Dtrue%26side%3Dprovider%26timestamp%3D1674960780647]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>[zk: localhost:2181(CONNECTED) 2] ls /services/first-dubbo-provider
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>[30.221.146.35:20880]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>[zk: localhost:2181(CONNECTED) 3] get /services/first-dubbo-provider/30.221.146.35:20880
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{&amp;#34;name&amp;#34;:&amp;#34;first-dubbo-provider&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;30.221.146.35:20880&amp;#34;,&amp;#34;address&amp;#34;:&amp;#34;30.221.146.35&amp;#34;,&amp;#34;port&amp;#34;:20880,&amp;#34;sslPort&amp;#34;:null,&amp;#34;payload&amp;#34;:{&amp;#34;@class&amp;#34;:&amp;#34;org.apache.dubbo.registry.zookeeper.ZookeeperInstance&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;30.221.146.35:20880&amp;#34;,&amp;#34;name&amp;#34;:&amp;#34;first-dubbo-provider&amp;#34;,&amp;#34;metadata&amp;#34;:{&amp;#34;dubbo.endpoints&amp;#34;:&amp;#34;[{\&amp;#34;port\&amp;#34;:20880,\&amp;#34;protocol\&amp;#34;:\&amp;#34;dubbo\&amp;#34;}]&amp;#34;,&amp;#34;dubbo.metadata-service.url-params&amp;#34;:&amp;#34;{\&amp;#34;connections\&amp;#34;:\&amp;#34;1\&amp;#34;,\&amp;#34;version\&amp;#34;:\&amp;#34;1.0.0\&amp;#34;,\&amp;#34;dubbo\&amp;#34;:\&amp;#34;2.0.2\&amp;#34;,\&amp;#34;release\&amp;#34;:\&amp;#34;3.1.4\&amp;#34;,\&amp;#34;side\&amp;#34;:\&amp;#34;provider\&amp;#34;,\&amp;#34;ipv6\&amp;#34;:\&amp;#34;fd00:1:5:5200:3218:774a:4f67:2341\&amp;#34;,\&amp;#34;port\&amp;#34;:\&amp;#34;20880\&amp;#34;,\&amp;#34;protocol\&amp;#34;:\&amp;#34;dubbo\&amp;#34;}&amp;#34;,&amp;#34;dubbo.metadata.revision&amp;#34;:&amp;#34;871fbc9cb2730caea9b0d858852d5ede&amp;#34;,&amp;#34;dubbo.metadata.storage-type&amp;#34;:&amp;#34;local&amp;#34;,&amp;#34;ipv6&amp;#34;:&amp;#34;fd00:1:5:5200:3218:774a:4f67:2341&amp;#34;,&amp;#34;timestamp&amp;#34;:&amp;#34;1674960780647&amp;#34;}},&amp;#34;registrationTimeUTC&amp;#34;:1674960781893,&amp;#34;serviceType&amp;#34;:&amp;#34;DYNAMIC&amp;#34;,&amp;#34;uriSpec&amp;#34;:null}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>更多关于 Dubbo 服务发现模型的细节，可以参考&lt;a href="http://static.dubbo.apache.org:8080/zh-cn/docs3-v2/java-sdk/concepts-and-architecture/service-discovery/">服务发现&lt;/a>一文。&lt;/p>
+&lt;h3 id="2-消费端是如何发起请求的">2. 消费端是如何发起请求的？&lt;/h3>
+&lt;p>在 Dubbo 的调用模型中，起到连接服务消费者和服务提供者的桥梁是接口。&lt;/p>
+&lt;p>服务提供者通过对指定接口进行实现，服务消费者通过 Dubbo 去订阅这个接口。服务消费者调用接口的过程中 Dubbo 会将请求封装成网络请求，然后发送到服务提供者进行实际的调用。&lt;/p>
+&lt;p>在本用例中，定义了一个 &lt;code>GreetingsService&lt;/code> 的接口，这个接口有一个名为 &lt;code>sayHi&lt;/code> 的方法。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-java" data-lang="java">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">// 1-basic/dubbo-samples-api/src/main/java/org/apache/dubbo/samples/api/GreetingsService.java
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#719e07">package&lt;/span> org.apache.dubbo.samples.api&lt;span style="color:#719e07">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#268bd2">public&lt;/span> &lt;span style="color:#268bd2">interface&lt;/span> &lt;span style="color:#268bd2">GreetingsService&lt;/span> &lt;span style="color:#719e07">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> String &lt;span style="color:#268bd2">sayHi&lt;/span>&lt;span style="color:#719e07">(&lt;/span>String name&lt;span style="color:#719e07">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#719e07">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>服务消费者通过 Dubbo 的 API 可以获取这个 &lt;code>GreetingsService&lt;/code> 接口的代理，然后就可以按照普通的接口调用方式进行调用。&lt;strong>得益于 Dubbo 的动态代理机制，这一切都像本地调用一样。&lt;/strong>&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-java" data-lang="java">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">// 1-basic/dubbo-samples-api/src/main/java/org/apache/dubbo/samples/client/Application.java
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">// 获取订阅到的 Stub
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">&lt;/span>GreetingsService service &lt;span style="color:#719e07">=&lt;/span> reference&lt;span style="color:#719e07">.&lt;/span>get&lt;span style="color:#719e07">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">// 像普通的 java 接口一样调用
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">&lt;/span>String message &lt;span style="color:#719e07">=&lt;/span> service&lt;span style="color:#719e07">.&lt;/span>sayHi&lt;span style="color:#719e07">(&lt;/span>&lt;span style="color:#2aa198">&amp;#34;dubbo&amp;#34;&lt;/span>&lt;span style="color:#719e07">);&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="3-服务端可以部署多个吗">3. 服务端可以部署多个吗？&lt;/h3>
+&lt;p>可以，本小节将演示如何启动一个服务端&lt;strong>集群&lt;/strong>。&lt;/p>
+&lt;p>1）启动一个注册中心，可以参考动手实践中第 3 小节的&lt;a href="#3-%E5%90%AF%E5%8A%A8%E4%B8%80%E4%B8%AA%E7%AE%80%E6%98%93%E7%9A%84%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83">教程&lt;/a>&lt;/p>
+&lt;p>2）修改服务提供者返回的数据，让第一个启动的服务提供者返回 &lt;code>hi, dubbo. I am provider 1.&lt;/code>&lt;/p>
+&lt;p>修改 &lt;code>1-basic/dubbo-samples-api/src/main/java/org/apache/dubbo/samples/provider/GreetingsServiceImpl.java&lt;/code> 文件的第 25 行如下所示。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-java" data-lang="java">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">// 1-basic/dubbo-samples-api/src/main/java/org/apache/dubbo/samples/provider/GreetingsServiceImpl.java
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#719e07">package&lt;/span> org.apache.dubbo.samples.provider&lt;span style="color:#719e07">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#719e07">import&lt;/span> org.apache.dubbo.samples.api.GreetingsService&lt;span style="color:#719e07">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#268bd2">public&lt;/span> &lt;span style="color:#268bd2">class&lt;/span> &lt;span style="color:#268bd2">GreetingsServiceImpl&lt;/span> &lt;span style="color:#268bd2">implements&lt;/span> GreetingsService &lt;span style="color:#719e07">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#268bd2">@Override&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#268bd2">public&lt;/span> String &lt;span style="color:#268bd2">sayHi&lt;/span>&lt;span style="color:#719e07">(&lt;/span>String name&lt;span style="color:#719e07">)&lt;/span> &lt;span style="color:#719e07">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#719e07">return&lt;/span> &lt;span style="color:#2aa198">&amp;#34;hi, &amp;#34;&lt;/span> &lt;span style="color:#719e07">+&lt;/span> name &lt;span style="color:#719e07">+&lt;/span> &lt;span style="color:#2aa198">&amp;#34;. I am provider 1.&amp;#34;&lt;/span>&lt;span style="color:#719e07">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#719e07">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#719e07">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>3）启动第一个服务提供者，可以参考动手实践中第 4 小节的&lt;a href="#4-%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1%E6%8F%90%E4%BE%9B%E8%80%85">教程&lt;/a>&lt;/p>
+&lt;p>4）修改服务提供者返回的数据，让第二个启动的服务提供者返回 &lt;code>hi, dubbo. I am provider 2.&lt;/code>&lt;/p>
+&lt;p>修改 &lt;code>1-basic/dubbo-samples-api/src/main/java/org/apache/dubbo/samples/provider/GreetingsServiceImpl.java&lt;/code> 文件的第 25 行如下所示。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-java" data-lang="java">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">// 1-basic/dubbo-samples-api/src/main/java/org/apache/dubbo/samples/provider/GreetingsServiceImpl.java
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#719e07">package&lt;/span> org.apache.dubbo.samples.provider&lt;span style="color:#719e07">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#719e07">import&lt;/span> org.apache.dubbo.samples.api.GreetingsService&lt;span style="color:#719e07">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#268bd2">public&lt;/span> &lt;span style="color:#268bd2">class&lt;/span> &lt;span style="color:#268bd2">GreetingsServiceImpl&lt;/span> &lt;span style="color:#268bd2">implements&lt;/span> GreetingsService &lt;span style="color:#719e07">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#268bd2">@Override&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#268bd2">public&lt;/span> String &lt;span style="color:#268bd2">sayHi&lt;/span>&lt;span style="color:#719e07">(&lt;/span>String name&lt;span style="color:#719e07">)&lt;/span> &lt;span style="color:#719e07">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#719e07">return&lt;/span> &lt;span style="color:#2aa198">&amp;#34;hi, &amp;#34;&lt;/span> &lt;span style="color:#719e07">+&lt;/span> name &lt;span style="color:#719e07">+&lt;/span> &lt;span style="color:#2aa198">&amp;#34;. I am provider 2.&amp;#34;&lt;/span>&lt;span style="color:#719e07">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#719e07">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#719e07">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>4）启动第二个服务提供者，可以参考动手实践中第 4 小节的&lt;a href="#4-%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1%E6%8F%90%E4%BE%9B%E8%80%85">教程&lt;/a>&lt;/p>
+&lt;p>5）启动服务消费者，可以参考动手实践中第 5 小节的&lt;a href="#5-%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1%E6%B6%88%E8%B4%B9%E8%80%85">教程&lt;/a>。多次启动消费者可以看到返回的结果是不一样的。&lt;/p>
+&lt;p>在 dubbo-samples 中也提供了一个会定时发起调用的消费端应用&lt;code>org.apache.dubbo.samples.client.AlwaysApplication&lt;/code>，可以通过以下命令启动。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>Windows:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>./mvnw.cmd clean compile exec:java -pl 1-basic/dubbo-samples-api -Dexec.mainClass&lt;span style="color:#719e07">=&lt;/span>&lt;span style="color:#2aa198">&amp;#34;org.apache.dubbo.samples.client.AlwaysApplication&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Linux / MacOS:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>./mvnw clean compile exec:java -pl 1-basic/dubbo-samples-api -Dexec.mainClass&lt;span style="color:#719e07">=&lt;/span>&lt;span style="color:#2aa198">&amp;#34;org.apache.dubbo.samples.client.AlwaysApplication&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>启动后可以看到类似以下的日志，消费端会随机调用到不同的服务提供者，返回的结果也是远端的服务提供者觉得其结果。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-fallback" data-lang="fallback">&lt;span style="display:flex;">&lt;span>Sun Jan 29 11:23:37 CST 2023 Receive result ======&amp;gt; hi, dubbo. I am provider 1.
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Sun Jan 29 11:23:38 CST 2023 Receive result ======&amp;gt; hi, dubbo. I am provider 2.
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Sun Jan 29 11:23:39 CST 2023 Receive result ======&amp;gt; hi, dubbo. I am provider 2.
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Sun Jan 29 11:23:40 CST 2023 Receive result ======&amp;gt; hi, dubbo. I am provider 1.
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Sun Jan 29 11:23:41 CST 2023 Receive result ======&amp;gt; hi, dubbo. I am provider 1.
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="4-这个用例复杂吗">4. 这个用例复杂吗？&lt;/h3>
+&lt;p>不，Dubbo 只需要简单的配置就可以实现稳定、高效的远程调用。&lt;/p>
+&lt;p>以下是一个服务提供者的简单示例，通过定义若干个配置就可以启动。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-java" data-lang="java">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">// 1-basic/dubbo-samples-api/src/main/java/org/apache/dubbo/samples/provider/Application.java
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">// 定义所有的服务
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">&lt;/span>ServiceConfig&lt;span style="color:#719e07">&amp;lt;&lt;/span>GreetingsService&lt;span style="color:#719e07">&amp;gt;&lt;/span> service &lt;span style="color:#719e07">=&lt;/span> &lt;span style="color:#719e07">new&lt;/span> ServiceConfig&lt;span style="color:#719e07">&amp;lt;&amp;gt;();&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>service&lt;span style="color:#719e07">.&lt;/span>setInterface&lt;span style="color:#719e07">(&lt;/span>GreetingsService&lt;span style="color:#719e07">.&lt;/span>class&lt;span style="color:#719e07">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>service&lt;span style="color:#719e07">.&lt;/span>setRef&lt;span style="color:#719e07">(&lt;/span>&lt;span style="color:#719e07">new&lt;/span> GreetingsServiceImpl&lt;span style="color:#719e07">());&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">// 启动 Dubbo
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">&lt;/span>DubboBootstrap&lt;span style="color:#719e07">.&lt;/span>getInstance&lt;span style="color:#719e07">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#719e07">.&lt;/span>application&lt;span style="color:#719e07">(&lt;/span>&lt;span style="color:#2aa198">&amp;#34;first-dubbo-provider&amp;#34;&lt;/span>&lt;span style="color:#719e07">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#719e07">.&lt;/span>registry&lt;span style="color:#719e07">(&lt;/span>&lt;span style="color:#719e07">new&lt;/span> RegistryConfig&lt;span style="color:#719e07">(&lt;/span>ZOOKEEPER_ADDRESS&lt;span style="color:#719e07">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#719e07">.&lt;/span>protocol&lt;span style="color:#719e07">(&lt;/span>&lt;span style="color:#719e07">new&lt;/span> ProtocolConfig&lt;span style="color:#719e07">(&lt;/span>&lt;span style="color:#2aa198">&amp;#34;dubbo&amp;#34;&lt;/span>&lt;span style="color:#719e07">,&lt;/span> &lt;span style="color:#719e07">-&lt;/span>&lt;span style="color:#2aa198">1&lt;/span>&lt;span style="color:#719e07">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#719e07">.&lt;/span>service&lt;span style="color:#719e07">(&lt;/span>service&lt;span style="color:#719e07">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#719e07">.&lt;/span>start&lt;span style="color:#719e07">();&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>以下是一个服务消费者的简单示例，通过定义若干个配置启动后就可以获取到对应的代理对象，之后用户完全不需要感知这个对象背后的复杂实现，&lt;strong>一切只需要和本地调用一样就行了&lt;/strong>。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-java" data-lang="java">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">// 1-basic/dubbo-samples-api/src/main/java/org/apache/dubbo/samples/client/Application.java
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">// 定义所有的订阅
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">&lt;/span>ReferenceConfig&lt;span style="color:#719e07">&amp;lt;&lt;/span>GreetingsService&lt;span style="color:#719e07">&amp;gt;&lt;/span> reference &lt;span style="color:#719e07">=&lt;/span> &lt;span style="color:#719e07">new&lt;/span> ReferenceConfig&lt;span style="color:#719e07">&amp;lt;&amp;gt;();&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>reference&lt;span style="color:#719e07">.&lt;/span>setInterface&lt;span style="color:#719e07">(&lt;/span>GreetingsService&lt;span style="color:#719e07">.&lt;/span>class&lt;span style="color:#719e07">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">// 启动 Dubbo
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">&lt;/span>DubboBootstrap&lt;span style="color:#719e07">.&lt;/span>getInstance&lt;span style="color:#719e07">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#719e07">.&lt;/span>application&lt;span style="color:#719e07">(&lt;/span>&lt;span style="color:#2aa198">&amp;#34;first-dubbo-consumer&amp;#34;&lt;/span>&lt;span style="color:#719e07">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#719e07">.&lt;/span>registry&lt;span style="color:#719e07">(&lt;/span>&lt;span style="color:#719e07">new&lt;/span> RegistryConfig&lt;span style="color:#719e07">(&lt;/span>ZOOKEEPER_ADDRESS&lt;span style="color:#719e07">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#719e07">.&lt;/span>reference&lt;span style="color:#719e07">(&lt;/span>reference&lt;span style="color:#719e07">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#719e07">.&lt;/span>start&lt;span style="color:#719e07">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">// 获取订阅到的 Stub
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">&lt;/span>GreetingsService service &lt;span style="color:#719e07">=&lt;/span> reference&lt;span style="color:#719e07">.&lt;/span>get&lt;span style="color:#719e07">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">// 像普通的 java 接口一样调用
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">&lt;/span>String message &lt;span style="color:#719e07">=&lt;/span> service&lt;span style="color:#719e07">.&lt;/span>sayHi&lt;span style="color:#719e07">(&lt;/span>&lt;span style="color:#2aa198">&amp;#34;dubbo&amp;#34;&lt;/span>&lt;span style="color:#719e07">);&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="更多">更多&lt;/h2>
+&lt;p>本用例介绍了一个 RPC 远程调用的基础流程，通过启动注册中心、服务提供者、服务消费者三个节点来模拟一个微服务的部署架构。&lt;/p>
+&lt;p>下一个教程中，将就服务提供者和服务消费者分别都做了什么配置进行讲解，从零告诉你如何搭建一个微服务应用。&lt;/p>
+&lt;section id="section-0" style="">
+&lt;div class="td-content list-page">
+&lt;div class="lead">&lt;/div>&lt;header class="article-meta">
+&lt;/header>&lt;div class="row">
+&lt;div class="col-sm col-md-6 mb-4">
+&lt;div class="h-100 card shadow" href="#">
+&lt;div class="card-body">
+&lt;h4 class="card-title">
+&lt;a href='http://static.dubbo.apache.org:8080/zh-cn/docs3-v2/rust-sdk/streaming/'>Streaming 通信模式&lt;/a>
+&lt;/h4>
+&lt;p>使用 Dubbo Rust 实现 Streaming 通信模型。&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;div class="col-sm col-md-6 mb-4">
+&lt;div class="h-100 card shadow" href="#">
+&lt;div class="card-body">
+&lt;h4 class="card-title">
+&lt;a href='http://static.dubbo.apache.org:8080/zh-cn/docs3-v2/rust-sdk/java-interoperability/'>与 Dubbo Java 互通&lt;/a>
+&lt;/h4>
+&lt;p>实现与其他 Dubbo 多语言服务的互通&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;hr>
+&lt;/div>
+&lt;/section></description></item><item><title>Overview: Go 微服务开发入门</title><link>http://static.dubbo.apache.org:8080/zh-cn/overview/quickstart/go/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://static.dubbo.apache.org:8080/zh-cn/overview/quickstart/go/</guid><description/></item><item><title>Overview: Node.js 微服务开发入门</title><link>http://static.dubbo.apache.org:8080/zh-cn/overview/quickstart/nodejs/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://static.dubbo.apache.org:8080/zh-cn/overview/quickstart/nodejs/</guid><description/></item><item><title>Overview: Rust 微服务开发入门</title><link>http://static.dubbo.apache.org:8080/zh-cn/overview/quickstart/rust/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://static.dubbo.apache.org:8080/zh-cn/overview/quickstart/rust/</guid><description>
+&lt;p>请在此查看完整 &lt;a href="https://github.com/apache/dubbo-rust/tree/main/examples/greeter">示例&lt;/a>。&lt;/p>
+&lt;h2 id="1-前置条件">1 前置条件&lt;/h2>
+&lt;ul>
+&lt;li>安装 &lt;a href="https://rustup.rs/">Rust&lt;/a> 开发环境&lt;/li>
+&lt;li>安装 &lt;a href="https://grpc.io/docs/protoc-installation/">protoc&lt;/a> 工具&lt;/li>
+&lt;/ul>
+&lt;h2 id="2-使用-idl-定义-dubbo-服务">2 使用 IDL 定义 Dubbo 服务&lt;/h2>
+&lt;p>Greeter 服务定义如下，包含一个 Unary(request-response) 模型的 Dubbo 服务。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-protobuf" data-lang="protobuf">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">// ./proto/greeter.proto
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">&lt;/span>syntax &lt;span style="color:#719e07">=&lt;/span> &lt;span style="color:#2aa198">&amp;#34;proto3&amp;#34;&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#719e07">option&lt;/span> java_multiple_files &lt;span style="color:#719e07">=&lt;/span> &lt;span style="color:#cb4b16">true&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#719e07">package&lt;/span> org&lt;span style="color:#719e07">.&lt;/span>apache.dubbo.sample.tri;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">// The request message containing the user&amp;#39;s name.
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">&lt;/span>&lt;span style="color:#268bd2">message&lt;/span> &lt;span style="color:#268bd2">GreeterRequest&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#dc322f">string&lt;/span> name &lt;span style="color:#719e07">=&lt;/span> &lt;span style="color:#2aa198">1&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">// The response message containing the greetings
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">&lt;/span>&lt;span style="color:#268bd2">message&lt;/span> &lt;span style="color:#268bd2">GreeterReply&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#dc322f">string&lt;/span> &lt;span style="color:#268bd2">message&lt;/span> &lt;span style="color:#719e07">=&lt;/span> &lt;span style="color:#2aa198">1&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#268bd2">service&lt;/span> Greeter{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#586e75">// unary
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">&lt;/span> &lt;span style="color:#719e07">rpc&lt;/span> greet(GreeterRequest) &lt;span style="color:#719e07">returns&lt;/span> (GreeterReply);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="3-添加-dubbo-rust-及相关依赖到项目">3 添加 Dubbo-rust 及相关依赖到项目&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-toml" data-lang="toml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75"># ./Cargo.toml&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>[package]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>name = &lt;span style="color:#2aa198">&amp;#34;example-greeter&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>version = &lt;span style="color:#2aa198">&amp;#34;0.1.0&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>edition = &lt;span style="color:#2aa198">&amp;#34;2021&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>[[bin]]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>name = &lt;span style="color:#2aa198">&amp;#34;greeter-server&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>path = &lt;span style="color:#2aa198">&amp;#34;src/greeter/server.rs&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>[[bin]]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>name = &lt;span style="color:#2aa198">&amp;#34;greeter-client&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>path = &lt;span style="color:#2aa198">&amp;#34;src/greeter/client.rs&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>[dependencies]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>http = &lt;span style="color:#2aa198">&amp;#34;0.2&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>http-body = &lt;span style="color:#2aa198">&amp;#34;0.4.4&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>futures-util = {version = &lt;span style="color:#2aa198">&amp;#34;0.3&amp;#34;&lt;/span>, default-features = &lt;span style="color:#cb4b16">false&lt;/span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>tokio = { version = &lt;span style="color:#2aa198">&amp;#34;1.0&amp;#34;&lt;/span>, features = [ &lt;span style="color:#2aa198">&amp;#34;rt-multi-thread&amp;#34;&lt;/span>, &lt;span style="color:#2aa198">&amp;#34;time&amp;#34;&lt;/span>, &lt;span style="color:#2aa198">&amp;#34;fs&amp;#34;&lt;/span>, &lt;span style="color:#2aa198">&amp;#34;macros&amp;#34;&lt;/span>, &lt;span style="color:#2aa198">&amp;#34;net&amp;#34;&lt;/span>, &lt;span style="color:#2aa198">&amp;#34;signal&amp;#34;&lt;/span>] }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>prost-derive = {version = &lt;span style="color:#2aa198">&amp;#34;0.10&amp;#34;&lt;/span>, optional = &lt;span style="color:#cb4b16">true&lt;/span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>prost = &lt;span style="color:#2aa198">&amp;#34;0.10.4&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>async-trait = &lt;span style="color:#2aa198">&amp;#34;0.1.56&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>tokio-stream = &lt;span style="color:#2aa198">&amp;#34;0.1&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>dubbo = &lt;span style="color:#2aa198">&amp;#34;0.1.0&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>dubbo-config = &lt;span style="color:#2aa198">&amp;#34;0.1.0&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>[build-dependencies]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>dubbo-build = &lt;span style="color:#2aa198">&amp;#34;0.1.0&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="4-配置-dubbo-build-编译-idl">4 配置 dubbo-build 编译 IDL&lt;/h2>
+&lt;p>在项目根目录创建 (not /src)，创建 &lt;code>build.rs&lt;/code> 文件并添加以下内容：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-rust" data-lang="rust">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">// ./build.rs
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">&lt;/span>&lt;span style="color:#719e07">fn&lt;/span> &lt;span style="color:#268bd2">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> dubbo_build::prost::configure()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .compile(&lt;span style="color:#719e07">&amp;amp;&lt;/span>[&lt;span style="color:#2aa198">&amp;#34;proto/greeter.proto&amp;#34;&lt;/span>], &lt;span style="color:#719e07">&amp;amp;&lt;/span>[&lt;span style="color:#2aa198">&amp;#34;proto/&amp;#34;&lt;/span>])
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .unwrap();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>这样配置之后，编译项目就可以生成 Dubbo Stub 相关代码，路径一般在&lt;code>./target/debug/build/example-greeter-&amp;lt;id&amp;gt;/out/org.apache.dubbo.sample.tri.rs&lt;/code>。&lt;/p>
+&lt;h2 id="5-编写-dubbo-业务代码">5 编写 Dubbo 业务代码&lt;/h2>
+&lt;h3 id="51-编写-dubbo-server">5.1 编写 Dubbo Server&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-rust" data-lang="rust">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">// ./src/greeter/server.rs
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">&lt;/span>&lt;span style="color:#719e07">use&lt;/span> &lt;span style="color:#719e07">..&lt;/span>.
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#719e07">#[tokio::main]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#719e07">async&lt;/span> &lt;span style="color:#719e07">fn&lt;/span> &lt;span style="color:#268bd2">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> register_server(GreeterServerImpl {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> name: &lt;span style="color:#2aa198">&amp;#34;greeter&amp;#34;&lt;/span>.to_string(),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> });
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#586e75">// Dubbo::new().start().await;
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">&lt;/span> Dubbo::new()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .with_config({
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#268bd2">let&lt;/span> r &lt;span style="color:#719e07">=&lt;/span> RootConfig::new();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#719e07">match&lt;/span> r.load() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b58900">Ok&lt;/span>(config) &lt;span style="color:#719e07">=&amp;gt;&lt;/span> config,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b58900">Err&lt;/span>(_err) &lt;span style="color:#719e07">=&amp;gt;&lt;/span> panic!(&lt;span style="color:#2aa198">&amp;#34;err: {:?}&amp;#34;&lt;/span>, _err), &lt;span style="color:#586e75">// response was droped
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">&lt;/span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> })
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .start()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .&lt;span style="color:#719e07">await&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#719e07">#[allow(dead_code)]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#719e07">#[derive(Default, Clone)]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#719e07">struct&lt;/span> &lt;span style="color:#268bd2">GreeterServerImpl&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> name: &lt;span style="color:#b58900">String&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">// #[async_trait]
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">&lt;/span>&lt;span style="color:#719e07">#[async_trait]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#719e07">impl&lt;/span> Greeter &lt;span style="color:#719e07">for&lt;/span> GreeterServerImpl {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#719e07">async&lt;/span> &lt;span style="color:#719e07">fn&lt;/span> &lt;span style="color:#268bd2">greet&lt;/span>(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#719e07">&amp;amp;&lt;/span>&lt;span style="color:#268bd2">self&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> request: &lt;span style="color:#268bd2">Request&lt;/span>&lt;span style="color:#719e07">&amp;lt;&lt;/span>GreeterRequest&lt;span style="color:#719e07">&amp;gt;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ) -&amp;gt; &lt;span style="color:#b58900">Result&lt;/span>&lt;span style="color:#719e07">&amp;lt;&lt;/span>Response&lt;span style="color:#719e07">&amp;lt;&lt;/span>GreeterReply&lt;span style="color:#719e07">&amp;gt;&lt;/span>, dubbo::status::Status&lt;span style="color:#719e07">&amp;gt;&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println!(&lt;span style="color:#2aa198">&amp;#34;GreeterServer::greet {:?}&amp;#34;&lt;/span>, request.metadata);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b58900">Ok&lt;/span>(Response::new(GreeterReply {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> message: &lt;span style="color:#2aa198">&amp;#34;hello, dubbo-rust&amp;#34;&lt;/span>.to_string(),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="52-配置dubboyaml">5.2 配置dubbo.yaml&lt;/h3>
+&lt;p>dubbo.yaml指示server端的配置，包括暴露的服务列表、协议配置、监听配置等。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-yaml" data-lang="yaml">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75"># ./dubbo.yaml&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#268bd2">name&lt;/span>: dubbo
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#268bd2">service&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#268bd2">org.apache.dubbo.sample.tri.Greeter&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#268bd2">version&lt;/span>: &lt;span style="color:#2aa198">1.0.0&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#268bd2">group&lt;/span>: test
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#268bd2">protocol&lt;/span>: triple
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#268bd2">registry&lt;/span>: &lt;span style="color:#2aa198">&amp;#39;&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#268bd2">serializer&lt;/span>: json
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#268bd2">protocol_configs&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#268bd2">triple&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#268bd2">ip&lt;/span>: &lt;span style="color:#2aa198">0.0.0.0&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#268bd2">port&lt;/span>: &lt;span style="color:#2aa198">&amp;#39;8888&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#268bd2">name&lt;/span>: triple
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#268bd2">protocols&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#268bd2">triple&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#268bd2">ip&lt;/span>: &lt;span style="color:#2aa198">0.0.0.0&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#268bd2">port&lt;/span>: &lt;span style="color:#2aa198">&amp;#39;8888&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#268bd2">name&lt;/span>: triple
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="53-编写-dubbo-client">5.3 编写 Dubbo Client&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-rust" data-lang="rust">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">// ./src/greeter/client.rs
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#586e75">&lt;/span>&lt;span style="color:#719e07">use&lt;/span> &lt;span style="color:#719e07">..&lt;/span>.
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#719e07">#[tokio::main]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#719e07">async&lt;/span> &lt;span style="color:#719e07">fn&lt;/span> &lt;span style="color:#268bd2">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#268bd2">let&lt;/span> &lt;span style="color:#719e07">mut&lt;/span> cli &lt;span style="color:#719e07">=&lt;/span> GreeterClient::new().with_uri(&lt;span style="color:#2aa198">&amp;#34;http://127.0.0.1:8888&amp;#34;&lt;/span>.to_string());
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println!(&lt;span style="color:#2aa198">&amp;#34;# unary call&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#268bd2">let&lt;/span> resp &lt;span style="color:#719e07">=&lt;/span> cli
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .greet(Request::new(GreeterRequest {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> name: &lt;span style="color:#2aa198">&amp;#34;message from client&amp;#34;&lt;/span>.to_string(),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .&lt;span style="color:#719e07">await&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#268bd2">let&lt;/span> resp &lt;span style="color:#719e07">=&lt;/span> &lt;span style="color:#719e07">match&lt;/span> resp {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b58900">Ok&lt;/span>(resp) &lt;span style="color:#719e07">=&amp;gt;&lt;/span> resp,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#b58900">Err&lt;/span>(err) &lt;span style="color:#719e07">=&amp;gt;&lt;/span> &lt;span style="color:#719e07">return&lt;/span> println!(&lt;span style="color:#2aa198">&amp;#34;{:?}&amp;#34;&lt;/span>, err),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> };
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#268bd2">let&lt;/span> (_parts, body) &lt;span style="color:#719e07">=&lt;/span> resp.into_parts();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> println!(&lt;span style="color:#2aa198">&amp;#34;Response: {:?}&amp;#34;&lt;/span>, body);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="6-运行并总结">6 运行并总结&lt;/h2>
+&lt;ol>
+&lt;li>编译&lt;/li>
+&lt;/ol>
+&lt;p>执行&lt;code>cargo build&lt;/code>来编译server和client。&lt;/p>
+&lt;ol start="2">
+&lt;li>运行server&lt;/li>
+&lt;/ol>
+&lt;p>执行&lt;code>./target/debug/greeter-server&lt;/code>来运行server，如上文dubbo.yaml所配置，server会监听8888端口，并以triple协议提供RPC服务：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-sh" data-lang="sh">&lt;span style="display:flex;">&lt;span>$ ./target/debug/greeter-server
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>2022-09-28T23:33:28.104577Z INFO dubbo::framework: url: Some&lt;span style="color:#719e07">(&lt;/span>Url &lt;span style="color:#719e07">{&lt;/span> uri: &lt;span style="color:#2aa198">&amp;#34;triple://0.0.0.0:8888/org.apache.dubbo.sample.tri.Greeter&amp;#34;&lt;/span>, protocol: &lt;span style="color:#2aa198">&amp;#34;triple&amp;#34;&lt;/span>, location: &lt;span style="color:#2aa198">&amp;#34;0.0.0.0:8888&amp;#34;&lt;/span>, ip: &lt;span style="color:#2aa198">&amp;#34;0.0.0.0&amp;#34;&lt;/span>, port: &lt;span style="color:#2aa198">&amp;#34;8888&amp;#34;&lt;/span>, service_key: &lt;span style="color:#719e07">[&lt;/span>&lt;span style="color:#2aa198">&amp;#34;org.apache.dubbo.sample.tri.Greeter&amp;#34;&lt;/span>&lt;span style="color:#719e07">]&lt;/span>, params: &lt;span style="color:#719e07">{}&lt;/span> &lt;span style="color:#719e07">})&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ol start="3">
+&lt;li>运行client，验证调用是否成功&lt;/li>
+&lt;/ol>
+&lt;p>执行&lt;code>./target/debug/greeter-client&lt;/code>来运行client，调用&lt;code>triple://127.0.0.1:8888/org.apache.dubbo.sample.tri.Greeter&lt;/code>下的各种方法：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-sh" data-lang="sh">&lt;span style="display:flex;">&lt;span>$ ./target/debug/greeter-client
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Response: GreeterReply &lt;span style="color:#719e07">{&lt;/span> message: &lt;span style="color:#2aa198">&amp;#34;hello, dubbo-rust&amp;#34;&lt;/span> &lt;span style="color:#719e07">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;section id="section-0" style="">
+&lt;div class="td-content list-page">
+&lt;div class="lead">&lt;/div>&lt;header class="article-meta">
+&lt;/header>&lt;div class="row">
+&lt;div class="col-sm col-md-6 mb-4">
+&lt;div class="h-100 card shadow" href="#">
+&lt;div class="card-body">
+&lt;h4 class="card-title">
+&lt;a href='http://static.dubbo.apache.org:8080/zh-cn/docs3-v2/rust-sdk/streaming/'>Streaming 通信模式&lt;/a>
+&lt;/h4>
+&lt;p>使用 Dubbo Rust 实现 Streaming 通信模型。&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;div class="col-sm col-md-6 mb-4">
+&lt;div class="h-100 card shadow" href="#">
+&lt;div class="card-body">
+&lt;h4 class="card-title">
+&lt;a href='http://static.dubbo.apache.org:8080/zh-cn/docs3-v2/rust-sdk/java-interoperability/'>与 Dubbo Java 互通&lt;/a>
+&lt;/h4>
+&lt;p>实现与其他 Dubbo 多语言服务的互通&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;hr>
+&lt;/div>
+&lt;/section></description></item></channel></rss>
