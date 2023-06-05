@@ -1,4 +1,4 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Apache Dubbo – Dubbo 入门</title><link>https://cn.dubbo.apache.org/zh-cn/overview/quickstart/</link><description>Recent content in Dubbo 入门 on Apache Dubbo</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://cn.dubbo.apache.org/zh-cn/overview/quickstart/index.xml" rel="self" type="application/rss+xml"/><item><title>Overview: Java 微服务开发入门</title><link>https://cn.dubbo.apache.org/zh-cn/overview/quickstart/java/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://cn.dubbo.apache.org/zh-cn/overview/quickstart/java/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Apache Dubbo – Dubbo 入门</title><link>https://cn.dubbo.apache.org/zh-cn/overview/quickstart/</link><description>Recent content in Dubbo 入门 on Apache Dubbo</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><atom:link href="https://cn.dubbo.apache.org/zh-cn/overview/quickstart/index.xml" rel="self" type="application/rss+xml"/><item><title>Overview: Java 微服务开发入门</title><link>https://cn.dubbo.apache.org/zh-cn/overview/quickstart/java/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://cn.dubbo.apache.org/zh-cn/overview/quickstart/java/</guid><description>
 &lt;section id="section-0" style="">
 &lt;div class="td-content list-page">
 &lt;div class="lead">&lt;/div>&lt;header class="article-meta">
@@ -17,29 +17,9 @@
 &lt;div class="h-100 card shadow" href="#">
 &lt;div class="card-body">
 &lt;h4 class="card-title">
-&lt;a href='https://cn.dubbo.apache.org/zh-cn/overview/quickstart/java/api/'>Dubbo API 开发&lt;/a>
-&lt;/h4>
-&lt;p>基于 Dubbo API 开发微服务应用&lt;/p>
-&lt;/div>
-&lt;/div>
-&lt;/div>
-&lt;div class="col-sm col-md-6 mb-4">
-&lt;div class="h-100 card shadow" href="#">
-&lt;div class="card-body">
-&lt;h4 class="card-title">
 &lt;a href='https://cn.dubbo.apache.org/zh-cn/overview/quickstart/java/spring-boot/'>Dubbo x Spring Boot 开发&lt;/a>
 &lt;/h4>
-&lt;p>Dubbo x Spring Boot 开发微服务应用&lt;/p>
-&lt;/div>
-&lt;/div>
-&lt;/div>
-&lt;div class="col-sm col-md-6 mb-4">
-&lt;div class="h-100 card shadow" href="#">
-&lt;div class="card-body">
-&lt;h4 class="card-title">
-&lt;a href='https://cn.dubbo.apache.org/zh-cn/overview/quickstart/java/spring-xml/'>Dubbo x Spring XML 开发&lt;/a>
-&lt;/h4>
-&lt;p>Dubbo x Spring XML 开发微服务应用&lt;/p>
+&lt;p>使用 dubbo-spring-boot-starter 开发微服务应用&lt;/p>
 &lt;/div>
 &lt;/div>
 &lt;/div>
