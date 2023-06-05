@@ -1,4 +1,4 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Apache Dubbo – 升级和兼容性</title><link>https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/upgrades-and-compatibility/</link><description>Recent content in 升级和兼容性 on Apache Dubbo</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/upgrades-and-compatibility/index.xml" rel="self" type="application/rss+xml"/><item><title>Overview: 2.x 升级至 3.x</title><link>https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/upgrades-and-compatibility/2.x-to-3.x-compatibility-guide/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/upgrades-and-compatibility/2.x-to-3.x-compatibility-guide/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Apache Dubbo – 升级和兼容性</title><link>https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/upgrades-and-compatibility/</link><description>Recent content in 升级和兼容性 on Apache Dubbo</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><atom:link href="https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/upgrades-and-compatibility/index.xml" rel="self" type="application/rss+xml"/><item><title>Overview: 2.x 升级至 3.x</title><link>https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/upgrades-and-compatibility/2.x-to-3.x-compatibility-guide/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/upgrades-and-compatibility/2.x-to-3.x-compatibility-guide/</guid><description>
 &lt;h2 id="升级到-dubbo-3x-的收益">升级到 Dubbo 3.X 的收益&lt;/h2>
 &lt;p>Dubbo3 依旧保持了 2.x 的经典架构，以解决微服务进程间通信为主要职责，通过丰富的服务治理（如地址发现、流量管理等）能力来更好的管控微服务集群；Dubbo3 对原有框架的升级是全面的，体现在核心 Dubbo 特性的几乎每个环节，通过升级实现了稳定性、性能、伸缩性、易用性的全面提升。&lt;/p>
 &lt;p>&lt;img src="https://dubbo.apache.org/imgs/v3/concepts/architecture-1.png" alt="architecture-1">&lt;/p>
@@ -26,7 +26,7 @@
 &lt;/li>
 &lt;li>&lt;strong>统一的路由规则。&lt;/strong>
 &lt;ul>
-&lt;li>查看&lt;a href="https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/advanced-features-and-usage/traffic/mesh-style/">统一路由规则设计与实现&lt;/a>&lt;/li>
+&lt;li>查看&lt;a href="https://dubbo.apache.org/zh-cn/overview/tasks/traffic-management/">统一路由规则设计与实现&lt;/a>&lt;/li>
 &lt;/ul>
 &lt;/li>
 &lt;/ul>
@@ -172,7 +172,15 @@
 &lt;p>1）Triple 会认为空版本号和 1.0.0 版本号一致，如果您的服务端和客户端版本号不一致，但是都是空版本号或者都是 1.0.0 版本号，是可以正常通信的。
 2）对于没有匹配到版本号的服务，Triple 会尝试匹配任意版本号的服务，如果匹配到任意版本号的服务，也是可以正常通信的。&lt;/p>
 &lt;h4 id="q2如何保证和原来行为是对齐的">Q2：如何保证和原来行为是对齐的？&lt;/h4>
-&lt;p>通过配置 &lt;code>-Ddubbo.rpc.tri.ignore-1.0.0-version=true -Ddubbo.rpc.tri.resolve-fallback-to-default=true&lt;/code> 可以实现和 Dubbo 3.2.0 以前的行为。&lt;/p></description></item><item><title>Overview: 应用级服务发现</title><link>https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/upgrades-and-compatibility/service-discovery/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/upgrades-and-compatibility/service-discovery/</guid><description/></item><item><title>Overview: 序列化协议升级</title><link>https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/upgrades-and-compatibility/serialization-upgrade/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/upgrades-and-compatibility/serialization-upgrade/</guid><description>
+&lt;p>通过配置 &lt;code>-Ddubbo.rpc.tri.ignore-1.0.0-version=true -Ddubbo.rpc.tri.resolve-fallback-to-default=true&lt;/code> 可以实现和 Dubbo 3.2.0 以前的行为。&lt;/p></description></item><item><title>Overview: 3.2 升级至 3.3</title><link>https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/upgrades-and-compatibility/3.2-to-3.3-compatibility-guide/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/upgrades-and-compatibility/3.2-to-3.3-compatibility-guide/</guid><description>
+&lt;h2 id="功能修改点">功能修改点&lt;/h2>
+&lt;h3 id="1-移除了dubbo-native-plugin">1. 移除了dubbo-native-plugin&lt;/h3>
+&lt;p>在 3.3 版本中，移除了 dubbo-native-plugin。并且dubbo-native-plugin相关的功能都将迁移至dubbo-maven-plugin。&lt;/p>
+&lt;p>为什么要做这个迁移和调整？&lt;/p>
+&lt;ol>
+&lt;li>为了提升用户的使用体验，后续dubbo有关maven的插件能力都将统一使用dubbo-maven-plugin来提供。方便Dubbo用户使用和接入。而不需要一个特性对应一个插件，导致用户需要依赖多个plugin。&lt;/li>
+&lt;li>更加有利于后续Dubbo提供maven plugin能力时的维护和特性增强。&lt;/li>
+&lt;/ol></description></item><item><title>Overview: 应用级服务发现</title><link>https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/upgrades-and-compatibility/service-discovery/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/upgrades-and-compatibility/service-discovery/</guid><description/></item><item><title>Overview: 序列化协议升级</title><link>https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/upgrades-and-compatibility/serialization-upgrade/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/upgrades-and-compatibility/serialization-upgrade/</guid><description>
 &lt;p>在 3.1.0 版本中，Dubbo 默认支持的序列化协议新增对 Fastjson2 的支持。部分用户可能会考虑在现有的系统中对序列化协议进行升级，但服务端和客户端版本的差异可能导致客户端并不支持服务端的序列化协议。而在 3.2.0 版本中 Dubbo 的服务端引入新的配置&lt;code>prefer-serialization&lt;/code>，该特性可以完美解决服务端序列化升级过程中可能带来的风险。&lt;/p>
 &lt;h3 id="最佳实践">最佳实践&lt;/h3>
 &lt;p>序列化协议升级，需要分两步走：&lt;/p>
@@ -719,4 +727,32 @@ Grpc 使用 &lt;code>compiler&lt;/code> 将编写的 &lt;code>proto&lt;/code> �
 &lt;li>&amp;hellip;&lt;/li>
 &lt;/ul>
 &lt;p>&lt;code>stub&lt;/code> 用一种统一的使用方式帮我们屏蔽了不同调用方式的细节。不过目前 &lt;code>Dubbo3&lt;/code> 暂时只支持传统定义接口并进行调用的使用方式。&lt;/p>
-&lt;p>在不久的未来，&lt;code>Triple&lt;/code> 也将实现各种常用的 &lt;code>Stub&lt;/code>，让用户写一份&lt;code>proto&lt;/code>文件，通过 &lt;code>comipler&lt;/code> 可以在任意场景方便的使用，请拭目以待。&lt;/p></description></item></channel></rss>
+&lt;p>在不久的未来，&lt;code>Triple&lt;/code> 也将实现各种常用的 &lt;code>Stub&lt;/code>，让用户写一份&lt;code>proto&lt;/code>文件，通过 &lt;code>comipler&lt;/code> 可以在任意场景方便的使用，请拭目以待。&lt;/p></description></item><item><title>Overview: 查看历史版本文档</title><link>https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/upgrades-and-compatibility/version/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/upgrades-and-compatibility/version/</guid><description>
+&lt;section id="section-0" style="">
+&lt;div class="td-content list-page">
+&lt;div class="lead">&lt;/div>&lt;header class="article-meta">
+&lt;/header>&lt;div class="row">
+&lt;div class="col-sm col-md-6 mb-4 mb-md-0">
+&lt;div class="h-100 card shadow" href="#">
+&lt;div class="card-body">
+&lt;h4 class="card-title">
+&lt;a target="_blank" href='https://dubbo.apache.org/zh-cn/docs/'>Early 3.0 Version&lt;/a>
+&lt;/h4>
+&lt;p>早期 3.0 版本文档&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;div class="col-sm col-md-6 mb-4 mb-md-0">
+&lt;div class="h-100 card shadow">
+&lt;div class="card-body">
+&lt;h4 class="card-title">
+&lt;a target="_blank" href='https://dubbo.apache.org/zh-cn/docsv2.7/'>2.7.x Version&lt;/a>
+&lt;/h4>
+&lt;p>2.7.x 版本文档&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;hr>
+&lt;/div>
+&lt;/section></description></item></channel></rss>
